@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data - Hacked</title>
+    <style>
+        body {
+            background-color: black;
+            overflow: hidden;
+            margin: 0;
+            font-family: monospace;
+            color: #0f0; /* Default text color */
+        }
+
+        .binary {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .column {
+            position: relative;
+            width: 2%;
+            height: 100%;
+            overflow: hidden;
+            white-space: nowrap;
+            font-size: 20px;
+        }
+
+        .number {
+            display: block;
+            animation: drop 1s linear infinite; /* Faster drop speed */
+        }
+
+        @keyframes drop {
+            0% {
+                transform: translateY(-100%);
+            }
+            100% {
+                transform: translateY(100vh);
+            }
+        }
+
+        .hacked-message {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #f00; /* Hacked message in red */
+            font-size: 40px;
+            font-family: 'Courier New', monospace;
+            text-shadow: 0 0 10px #f00, 0 0 20px #f00, 0 0 30px red;
+            animation: blink 0.8s alternate infinite;
+        }
+
+        @keyframes blink {
+            from {
+                opacity: 1;
+            }
+            to {
+                opacity: 0;
+            }
+        }
+
+        /* Loading Container */
+        .loading-container {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            width: 200px;
+            padding: 10px;
+            background-color: #222;
+            color: #f00; /* Change loading text color to red */
+            font-family: 'Courier New', monospace;
+            border: 2px solid #f00; /* Change border color to red */
+        }
+
+        .loading-bar {
+            height: 10px;
+            background-color: blue; /* Change loading bar color to blue */
+            animation: loading 20s linear forwards; /* Set loading animation duration to 20 seconds */
+        }
+
+        @keyframes loading {
+            0% { width: 0; }
+            100% { width: 100%; }
+        }
+
+        /* Error Message */
+        .error-message {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #f00; /* Error message in red */
+            font-size: 30px;
+            font-family: 'Courier New', monospace;
+            display: none; /* Initially hidden */
+        }
+
+        /* Hide all content */
+        .hidden {
+            display: none;
+        }
+
+        /* Specific color for numbers */
+        .number.blue {
+            color: blue; /* Blue for numbers 2 and 6 */
+        }
+
+        .number.red {
+            color: red; /* Red for numbers 1 and 7 */
+        }
+    </style>
+</head>
+<body>
+    <div class="binary" id="binary"></div>
+    <div class="hacked-message">Your PC Has Been Hacked</div>
+    <div class="loading-container">
+        <div>Loading... Your data has been leaked</div>
+        <div class="loading-bar"></div>
+    </div>
+    <div class="error-message" id="error">Your data has been leaked. Now you are offline. Please try again later.</div>
+
+    <script>
+        const binaryContainer = document.getElementById("binary");
+        const columns = 100; // Increased the number of columns
+        const characters = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]; // Numbers from 0-9
+        const errorMessage = document.getElementById("error");
+
+        // Generate binary rain effect
+        for (let i = 0; i < columns; i++) {
+            const columnDiv = document.createElement("div");
+            columnDiv.classList.add("column");
+
+            const dropSpeed = Math.random() * 0.5 + 0.5; // Faster drop speed range
+
+            for (let j = 0; j < 30; j++) { // Increased the number of falling characters
+                const numberDiv = document.createElement("div");
+                numberDiv.classList.add("number");
+                const randomCharacter = characters[Math.floor(Math.random() * characters.length)];
+                numberDiv.textContent = randomCharacter;
+
+                // Apply specific colors based on character
+                if (randomCharacter === '1' || randomCharacter === '7') {
+                    numberDiv.classList.add("red"); // Red for 1 and 7
+                } else if (randomCharacter === '2' || randomCharacter === '6') {
+                    numberDiv.classList.add("blue"); // Blue for 2 and 6
+                }
+
+                numberDiv.style.animationDuration = `${dropSpeed}s`;
+                numberDiv.style.animationDelay = `${Math.random() * 0.5}s`; // Shorter delay for denser effect
+                columnDiv.appendChild(numberDiv);
+            }
+
+            binaryContainer.appendChild(columnDiv);
+        }
+
+        // Disable refresh functionality
+        window.addEventListener("keydown", function(event) {
+            if (event.key === "F5" || (event.ctrlKey && event.key === "r")) {
+                event.preventDefault(); // Prevent default refresh action
+            }
+        });
+
+        // Disable right-click context menu
+        window.addEventListener("contextmenu", function(event) {
+            event.preventDefault(); // Prevent context menu from opening
+        });
+
+        // Loading bar and error message
+        setTimeout(() => {
+            // Hide all content before displaying the error message
+            document.body.classList.add("hidden"); // Hide all elements
+            errorMessage.style.display = "block"; // Show error message after loading
+        }, 20000); // 20 seconds to complete loading
+    </script>
+</body>
+</html>
